@@ -1,0 +1,84 @@
+--====================================================================================
+-- СОЗДАНИЕ ПОСЛЕДОВАТЕЛЬНОСТИ ДЛЯ ШАБЛОНА
+--====================================================================================
+DROP SEQUENCE IF EXISTS SEQ_TEMPLATE;
+CREATE SEQUENCE IF NOT EXISTS SEQ_TEMPLATE START WITH 1 INCREMENT BY 1;
+
+--====================================================================================
+-- ТАБЛИЦА ПОДДЕРЖИВАЕМЫХ ТИПОВ
+--====================================================================================
+DROP TABLE IF EXISTS T_TYPE;
+CREATE TABLE IF NOT EXISTS T_TYPE (
+  ID       INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  NAME     VARCHAR(100) NOT NULL,
+  ACTIVE   BOOLEAN      NOT NULL             DEFAULT TRUE,
+  USERNAME VARCHAR(100) NOT NULL,
+  ADD_DT   TIMESTAMP    NOT NULL             DEFAULT NOW()
+);
+
+--====================================================================================
+-- ТАБЛИЦА С ХРАНЕНИЕМ ШАБЛОНОВ
+--====================================================================================
+DROP TABLE IF EXISTS T_TEMPLATE;
+CREATE TABLE IF NOT EXISTS T_TEMPLATE (
+  ID       INT          NOT NULL PRIMARY KEY,
+  NAME     VARCHAR(256) NOT NULL,
+  ACTIVE   BOOLEAN               DEFAULT TRUE,
+  USERNAME VARCHAR(100) NOT NULL,
+  ADD_DT   TIMESTAMP    NOT NULL DEFAULT NOW()
+);
+
+--====================================================================================
+-- ТАБЛИЦА С МЕТАИНФОРМАЦИЕЙ ПО ШАБЛОНАМ
+--====================================================================================
+DROP TABLE IF EXISTS T_TEMPLATE_META_INFO;
+CREATE TABLE IF NOT EXISTS T_TEMPLATE_META_INFO (
+  ID          INT          NOT NULL             AUTO_INCREMENT PRIMARY KEY,
+  ID_TEMPLATE INT          NOT NULL,
+  NAME        VARCHAR(512) NOT NULL,
+  ID_TYPE     INT          NOT NULL,
+  LENGTH      INT          NOT NULL             DEFAULT 1,
+  ORDERR      VARCHAR(2)   NOT NULL,
+  FOREIGN KEY (ID_TEMPLATE) REFERENCES T_TEMPLATE (ID)
+  ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (ID_TYPE) REFERENCES T_TYPE (ID)
+  ON DELETE CASCADE ON UPDATE CASCADE,
+);
+
+--====================================================================================
+-- НАПОЛНЕНИЕ ТЕСТОВЫМИ ДАННЫМИ
+--====================================================================================
+INSERT INTO T_TEMPLATE (
+  ID,
+  NAME,
+  USERNAME
+) VALUES (
+  (SELECT NEXT VALUE FOR SEQ_TEMPLATE),
+  'Тестовый шаблон',
+  'ezhov_da'
+);
+
+INSERT INTO T_TYPE (
+  NAME,
+  USERNAME
+) VALUES
+  ('STRING', 'ezhov_da'),
+  ('INTEGER', 'ezhov_da');
+
+INSERT INTO T_TEMPLATE_META_INFO (
+  ID_TEMPLATE,
+  NAME,
+  ID_TYPE,
+  LENGTH,
+  ORDERR
+) VALUES
+  ((SELECT MAX(ID)
+    FROM T_TEMPLATE), 'Код', 1, 500, '00'),
+  ((SELECT MAX(ID)
+    FROM T_TEMPLATE), 'Название', 1, 500, '01'),
+  ((SELECT MAX(ID)
+    FROM T_TEMPLATE), 'Количество', 2, 500, '02')
+
+
+
+
