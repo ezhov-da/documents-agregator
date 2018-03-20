@@ -1,5 +1,6 @@
 package ru.ezhov.template.core.template;
 
+import ru.ezhov.template.core.Name;
 import ru.ezhov.template.core.Source;
 import ru.ezhov.template.core.Type;
 
@@ -151,7 +152,7 @@ public class DbTemplate implements Template {
     }
 
     @Override
-    public Cell addCell(String name, String columnName, Type type, int length, Order order, String username) {
+    public Cell addCell(String name, Name columnName, Type type, int length, Order order, String username) {
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =
@@ -168,7 +169,7 @@ public class DbTemplate implements Template {
 
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, name);
-                    preparedStatement.setString(3, columnName);
+                    preparedStatement.setString(3, columnName.get());
                     preparedStatement.setInt(4, type.id());
                     preparedStatement.setInt(5, length);
                     preparedStatement.setString(6, order.value());

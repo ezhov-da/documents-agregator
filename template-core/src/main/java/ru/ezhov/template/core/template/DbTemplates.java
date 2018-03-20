@@ -1,5 +1,6 @@
 package ru.ezhov.template.core.template;
 
+import ru.ezhov.template.core.Name;
 import ru.ezhov.template.core.Source;
 
 import javax.sql.DataSource;
@@ -47,7 +48,7 @@ public class DbTemplates implements Templates {
     }
 
     @Override
-    public Template newTemplate(String name, String tableName, String username) {
+    public Template newTemplate(String name, Name tableName, String username) {
         int id = templateId.get();
 
         try {
@@ -62,7 +63,7 @@ public class DbTemplates implements Templates {
 
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, name);
-                    preparedStatement.setString(3, tableName);
+                    preparedStatement.setString(3, tableName.get());
                     preparedStatement.setString(4, username);
 
                     preparedStatement.execute();

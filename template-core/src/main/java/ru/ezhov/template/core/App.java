@@ -22,8 +22,10 @@ public class App {
                     .forEach(System.out::println);
 
 
-            Template template = templates.newTemplate("тест иииия", "ахтунг", "ezhov_da");
-            template.addCell("вау", "как то так", Type.STRING, 100, Order._05, "ezhov_da");
+            Name name = new StandartName();
+
+            Template template = templates.newTemplate("тест иииия", name, "ezhov_da");
+            template.addCell("вау", name, Type.STRING, 100, Order._05, "ezhov_da");
 
             template.allCells().forEach(c -> {
                 System.out.println(c.name());

@@ -36,4 +36,3 @@ WHERE
   ID = ?
   AND
   ID_TEMPLATE = ?;
-

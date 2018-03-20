@@ -1,5 +1,6 @@
 package ru.ezhov.template.core.template;
 
+import ru.ezhov.template.core.Name;
 import ru.ezhov.template.core.Type;
 
 import java.util.Date;
@@ -23,7 +24,7 @@ public interface Template {
 
     List<Cell> allCells();
 
-    Cell addCell(String name, String columnName, Type type, int length, Order order, String username);
+    Cell addCell(String name, Name columnName, Type type, int length, Order order, String username);
 
     Cell cell(int id);
 

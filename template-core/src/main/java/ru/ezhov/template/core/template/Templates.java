@@ -1,5 +1,7 @@
 package ru.ezhov.template.core.template;
 
+import ru.ezhov.template.core.Name;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
 public interface Templates {
     List<Template> all();
 
-    Template newTemplate(String name, String tableName, String username);
+    Template newTemplate(String name, Name tableName, String username);
 
     Template template(int idTemplate);
 
