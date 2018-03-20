@@ -46,7 +46,7 @@ public class DbTemplate implements Template {
     }
 
     @Override
-    public boolean isActive() {
+    public boolean active() {
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =

@@ -14,7 +14,7 @@ public interface Template {
 
     String name();
 
-    boolean isActive();
+    boolean active();
 
     String tableName();
 

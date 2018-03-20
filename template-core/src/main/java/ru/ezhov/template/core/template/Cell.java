@@ -20,4 +20,6 @@ public interface Cell {
     Order order();
 
     void order(Order order);
+
+    boolean active();
 }

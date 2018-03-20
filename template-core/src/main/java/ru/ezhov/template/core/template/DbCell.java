@@ -143,4 +143,25 @@ public final class DbCell implements Cell {
     public void order(Order order) {
         throw new UnsupportedOperationException("OOPS");
     }
+
+    @Override
+    public boolean active() {
+        try {
+            try (Connection connection = source.get().getConnection()) {
+                try (PreparedStatement preparedStatement =
+                             connection.prepareStatement("SELECT ACTIVE FROM T_TEMPLATE_META_INFO WHERE ID = ? AND ID_TEMPLATE = ?;")) {
+
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setInt(2, template.id());
+
+                    try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                        resultSet.next();
+                        return resultSet.getBoolean(1);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }
