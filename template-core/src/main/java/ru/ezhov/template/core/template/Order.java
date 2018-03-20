@@ -108,7 +108,17 @@ public enum Order {
         this.order = pattern;
     }
 
-    public String getOrder() {
+    String value() {
         return order;
+    }
+
+    public static Order getOrder(String order) {
+        for (Order o : values()) {
+            if (o.value().equals(order)) {
+                return o;
+            }
+        }
+
+        throw new RuntimeException("Не найден такой порядок");
     }
 }

@@ -5,6 +5,8 @@ import ru.ezhov.template.core.Type;
 public interface Cell {
     String name();
 
+    String columnName();
+
     void name(String name);
 
     Type type();
