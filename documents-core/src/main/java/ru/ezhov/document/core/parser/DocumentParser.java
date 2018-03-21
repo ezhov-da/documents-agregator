@@ -13,13 +13,13 @@ import java.util.logging.Logger;
 /**
  * Created by ezhov_da on 19.03.2018.
  */
-public class TemplateParser implements Parser {
-    private static final Logger LOG = Logger.getLogger(TemplateParser.class.getName());
+public class DocumentParser implements Parser {
+    private static final Logger LOG = Logger.getLogger(DocumentParser.class.getName());
 
     private InputStream src;
     private Document document;
 
-    public TemplateParser(Document document, InputStream src) {
+    public DocumentParser(Document document, InputStream src) {
         this.document = document;
         this.src = src;
     }

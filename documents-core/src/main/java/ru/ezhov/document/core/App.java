@@ -3,8 +3,8 @@ package ru.ezhov.document.core;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import ru.ezhov.document.core.document.*;
-import ru.ezhov.document.core.name.DefaultName;
-import ru.ezhov.document.core.name.Name;
+import ru.ezhov.document.core.name.ColumnName;
+import ru.ezhov.document.core.name.TableName;
 import ru.ezhov.document.core.source.H2Source;
 import ru.ezhov.document.core.source.Source;
 
@@ -25,13 +25,10 @@ public class App {
                     .all()
                     .forEach(System.out::println);
 
+            Document document = documents.newDocument("тест иииия" + Math.random(), new TableName(), "ezhov_da");
+            document.addField("вау", new ColumnName(), "тестовое описание", FieldType.STRING, 100, Order._05, "ezhov_da");
 
-            Name name = new DefaultName();
-
-            Document document = documents.newTemplate("тест иииия", name, "ezhov_da");
-            document.addCell("вау", name, FieldType.STRING, 100, Order._05, "ezhov_da");
-
-            document.allCells().forEach(c -> {
+            document.fields().forEach(c -> {
                 System.out.println(c.name());
                 System.out.println(c.columnName());
                 System.out.println(c.order());
@@ -58,7 +55,7 @@ public class App {
         //JsonParser parser = new JsonParser();
         //JsonElement jsonElement = parser.parse(jsonRaw);
         //processArray(jsonElement);
-        //System.out.println(template.rowCount());
+        //System.out.println(document.rowCount());
         //Workbook workbook = new Workbook(new Sheet());
     }
 

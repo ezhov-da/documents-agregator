@@ -16,4 +16,11 @@ public final class TextOf implements Text {
     public String asString() {
         return text.asString();
     }
+
+    @Override
+    public String toString() {
+        return "TextOf{" +
+                "text=" + text.asString() +
+                '}';
+    }
 }

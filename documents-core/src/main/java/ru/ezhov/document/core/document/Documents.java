@@ -10,9 +10,9 @@ import java.util.List;
 public interface Documents {
     List<Document> all();
 
-    Document newTemplate(String name, Name tableName, String username);
+    Document newDocument(String name, Name tableName, String username);
 
-    Document template(int idTemplate);
+    Document document(int idTemplate);
 
     //TODO: обновление шаблона
     //TODO: удаление шаблона

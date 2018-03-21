@@ -7,8 +7,8 @@ CREATE SEQUENCE IF NOT EXISTS SEQ_DOCUMENT START WITH 1 INCREMENT BY 1;
 --====================================================================================
 -- ТАБЛИЦА ПОДДЕРЖИВАЕМЫХ ТИПОВ
 --====================================================================================
-DROP TABLE IF EXISTS T_FIELD_TYPE;
-CREATE TABLE IF NOT EXISTS T_FIELD_TYPE (
+DROP TABLE IF EXISTS T_DOCUMENT_FIELD_TYPE;
+CREATE TABLE IF NOT EXISTS T_DOCUMENT_FIELD_TYPE (
   ID       INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
   NAME     VARCHAR(100) NOT NULL,
   ACTIVE   BOOLEAN      NOT NULL             DEFAULT TRUE,
@@ -21,12 +21,13 @@ CREATE TABLE IF NOT EXISTS T_FIELD_TYPE (
 --====================================================================================
 DROP TABLE IF EXISTS T_DOCUMENT;
 CREATE TABLE IF NOT EXISTS T_DOCUMENT (
-  ID         INT          NOT NULL PRIMARY KEY,
-  NAME       VARCHAR(256) NOT NULL,
-  ACTIVE     BOOLEAN               DEFAULT TRUE,
-  TABLE_NAME VARCHAR(50)  NOT NULL,
-  USERNAME   VARCHAR(100) NOT NULL,
-  ADD_DT     TIMESTAMP    NOT NULL DEFAULT NOW()
+  ID          INT          NOT NULL PRIMARY KEY,
+  NAME        VARCHAR(256) NOT NULL UNIQUE,
+  DESCRIPTION VARCHAR(8000),
+  ACTIVE      BOOLEAN               DEFAULT TRUE,
+  TABLE_NAME  VARCHAR(50)  NOT NULL,
+  USERNAME    VARCHAR(100) NOT NULL,
+  ADD_DT      TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 
 DROP INDEX IF EXISTS INDEX_DOCUMENT;
@@ -38,25 +39,45 @@ CREATE UNIQUE INDEX INDEX_DOCUMENT
 --====================================================================================
 DROP TABLE IF EXISTS T_DOCUMENT_FIELD;
 CREATE TABLE IF NOT EXISTS T_DOCUMENT_FIELD (
-  ID          INT          NOT NULL             AUTO_INCREMENT PRIMARY KEY,
-  ID_DOCUMENT INT          NOT NULL,
-  NAME        VARCHAR(512) NOT NULL,
-  ACTIVE      BOOLEAN                           DEFAULT TRUE,
-  COLUMN_NAME VARCHAR(50)  NOT NULL,
-  ID_TYPE     INT          NOT NULL,
-  LENGTH      INT          NOT NULL             DEFAULT 1,
-  ORDERR      VARCHAR(2)   NOT NULL,
-  USERNAME    VARCHAR(100) NOT NULL,
-  ADD_DT      TIMESTAMP    NOT NULL             DEFAULT NOW(),
+  ID            INT          NOT NULL             AUTO_INCREMENT PRIMARY KEY,
+  /*ID документа*/
+  ID_DOCUMENT   INT          NOT NULL,
+  /*название*/
+  NAME          VARCHAR(512) NOT NULL,
+  /*описание*/
+  DESCRIPTION   VARCHAR(8000),
+  /*активно ли поле в документе*/
+  ACTIVE        BOOLEAN                           DEFAULT TRUE,
+  /*название столбца для создания таблицы*/
+  COLUMN_NAME   VARCHAR(50)  NOT NULL,
+  /*ID типа поля*/
+  ID_FIELD_TYPE INT          NOT NULL,
+  /*длина поля для таблицы*/
+  LENGTH        INT          NOT NULL             DEFAULT 1,
+  /*может ли быть быть поле пустое*/
+  EMPTY         BOOLEAN      NOT NULL             DEFAULT TRUE,
+  /*сортировка при выводе*/
+  ORDERR        VARCHAR(2)   NOT NULL,
+  /*пользователь, который создал*/
+  USERNAME      VARCHAR(100) NOT NULL,
+  /*дата создания*/
+  ADD_DT        TIMESTAMP    NOT NULL             DEFAULT NOW(),
   FOREIGN KEY (ID_DOCUMENT) REFERENCES T_DOCUMENT (ID)
   ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (ID_TYPE) REFERENCES T_FIELD_TYPE (ID)
+  FOREIGN KEY (ID_FIELD_TYPE) REFERENCES T_DOCUMENT_FIELD_TYPE (ID)
   ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
 DROP INDEX IF EXISTS INDEX_DOCUMENT_FIELD;
 CREATE UNIQUE INDEX INDEX_DOCUMENT_FIELD
   ON T_DOCUMENT_FIELD (ID_DOCUMENT, COLUMN_NAME);
+
+--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+--====================================================================================
+-- РОЛЕВАЯ МОДЕЛЬ
+--====================================================================================
+--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+--TODO: описать ролевую модель
 
 --====================================================================================
 -- НАПОЛНЕНИЕ ТЕСТОВЫМИ ДАННЫМИ
@@ -73,7 +94,7 @@ INSERT INTO T_DOCUMENT (
   'ezhov_da'
 );
 
-INSERT INTO T_FIELD_TYPE (
+INSERT INTO T_DOCUMENT_FIELD_TYPE (
   NAME,
   USERNAME
 ) VALUES
@@ -84,7 +105,7 @@ INSERT INTO T_DOCUMENT_FIELD (
   ID_DOCUMENT,
   COLUMN_NAME,
   NAME,
-  ID_TYPE,
+  ID_FIELD_TYPE,
   LENGTH,
   ORDERR,
   USERNAME

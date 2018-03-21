@@ -7,19 +7,13 @@ public interface Field {
 
     String columnName();
 
-    void name(String name);
-
     FieldType type();
-
-    void type(FieldType fieldType);
 
     int length();
 
-    void length(int size);
-
     Order order();
 
-    void order(Order order);
-
     boolean active();
+
+    String description();
 }

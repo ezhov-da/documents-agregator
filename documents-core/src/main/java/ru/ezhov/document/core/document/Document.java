@@ -22,11 +22,13 @@ public interface Document {
 
     Date addDt();
 
-    List<Field> allCells();
+    String description();
 
-    Field addCell(String name, Name columnName, FieldType fieldType, int length, Order order, String username);
+    List<Field> fields();
 
-    Field cell(int id);
+    Field addField(String name, Name columnName, String description, FieldType fieldType, int length, Order order, String username);
+
+    Field field(int id);
 
     //TODO: обновление ячейки
     //TODO: удаление ячейки

@@ -108,10 +108,6 @@ public enum Order {
         this.order = pattern;
     }
 
-    String value() {
-        return order;
-    }
-
     public static Order getOrder(String order) {
         for (Order o : values()) {
             if (o.value().equals(order)) {
@@ -120,5 +116,9 @@ public enum Order {
         }
 
         throw new RuntimeException("Не найден такой порядок");
+    }
+
+    String value() {
+        return order;
     }
 }

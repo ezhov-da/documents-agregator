@@ -27,7 +27,7 @@ public class DbDocuments implements Documents {
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =
-                             connection.prepareStatement("SELECT ID FROM T_TEMPLATE")) {
+                             connection.prepareStatement("SELECT ID FROM T_DOCUMENT")) {
                     try (ResultSet resultSet = preparedStatement.executeQuery()) {
                         while (resultSet.next()) {
                             documents.add(new DbDocument(resultSet.getInt(1), source));
@@ -48,14 +48,14 @@ public class DbDocuments implements Documents {
     }
 
     @Override
-    public Document newTemplate(String name, Name tableName, String username) {
+    public Document newDocument(String name, Name tableName, String username) {
         int id = templateId.get();
 
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =
                              connection.prepareStatement(
-                                     "INSERT INTO T_TEMPLATE (\n" +
+                                     "INSERT INTO T_DOCUMENT (\n" +
                                              "ID, NAME, TABLE_NAME, USERNAME" +
                                              ") VALUES (\n" +
                                              " ?, ?, ?, ?)"
@@ -68,7 +68,7 @@ public class DbDocuments implements Documents {
 
                     preparedStatement.execute();
 
-                    return template(id);
+                    return document(id);
                 }
             }
         } catch (Exception ex) {
@@ -77,7 +77,7 @@ public class DbDocuments implements Documents {
     }
 
     @Override
-    public Document template(int idTemplate) {
+    public Document document(int idTemplate) {
         return new DbDocument(idTemplate, source);
     }
 }

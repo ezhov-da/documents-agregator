@@ -20,7 +20,7 @@ public final class DbDocumentId implements DocumentId {
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =
-                             connection.prepareStatement("SELECT (SELECT NEXT VALUE FOR SEQ_TEMPLATE) AS ID;")) {
+                             connection.prepareStatement("SELECT (SELECT NEXT VALUE FOR SEQ_DOCUMENT) AS ID;")) {
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         resultSet.next();
                         return resultSet.getInt(1);
