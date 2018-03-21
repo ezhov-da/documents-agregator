@@ -1,4 +1,4 @@
-# template-agregator
+# document-agregator
 
 Приложение для агрегирования поступающих шаблонов.
 

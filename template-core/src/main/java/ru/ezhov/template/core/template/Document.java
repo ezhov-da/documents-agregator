@@ -1,7 +1,7 @@
 package ru.ezhov.template.core.template;
 
-import ru.ezhov.template.core.Name;
-import ru.ezhov.template.core.Type;
+import ru.ezhov.template.core.name.Name;
+import ru.ezhov.template.core.FieldType;
 
 import java.util.Date;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by ezhov_da on 19.03.2018.
  */
-public interface Template {
+public interface Document {
     int id();
 
     String name();
@@ -22,11 +22,11 @@ public interface Template {
 
     Date addDt();
 
-    List<Cell> allCells();
+    List<Field> allCells();
 
-    Cell addCell(String name, Name columnName, Type type, int length, Order order, String username);
+    Field addCell(String name, Name columnName, FieldType fieldType, int length, Order order, String username);
 
-    Cell cell(int id);
+    Field cell(int id);
 
     //TODO: обновление ячейки
     //TODO: удаление ячейки

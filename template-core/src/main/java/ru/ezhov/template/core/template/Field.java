@@ -1,17 +1,17 @@
 package ru.ezhov.template.core.template;
 
-import ru.ezhov.template.core.Type;
+import ru.ezhov.template.core.FieldType;
 
-public interface Cell {
+public interface Field {
     String name();
 
     String columnName();
 
     void name(String name);
 
-    Type type();
+    FieldType type();
 
-    void type(Type type);
+    void type(FieldType fieldType);
 
     int length();
 

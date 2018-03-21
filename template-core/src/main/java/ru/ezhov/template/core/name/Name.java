@@ -1,4 +1,4 @@
-package ru.ezhov.template.core;
+package ru.ezhov.template.core.name;
 
 public interface Name {
     String get();

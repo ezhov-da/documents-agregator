@@ -1,6 +1,8 @@
 package ru.ezhov.template.core;
 
 import org.junit.Test;
+import ru.ezhov.template.core.name.Name;
+import ru.ezhov.template.core.name.UUIDName;
 
 import static org.junit.Assert.assertNotNull;
 

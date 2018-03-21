@@ -1,4 +1,4 @@
-package ru.ezhov.template.core;
+package ru.ezhov.template.core.source;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

@@ -1,7 +1,7 @@
 package ru.ezhov.template.core.template;
 
-import ru.ezhov.template.core.Name;
-import ru.ezhov.template.core.Source;
+import ru.ezhov.template.core.name.Name;
+import ru.ezhov.template.core.source.Source;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -22,21 +22,21 @@ public class DbTemplates implements Templates {
     }
 
     @Override
-    public List<Template> all() {
-        List<Template> templates = new ArrayList<>();
+    public List<Document> all() {
+        List<Document> documents = new ArrayList<>();
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =
                              connection.prepareStatement("SELECT ID FROM T_TEMPLATE")) {
                     try (ResultSet resultSet = preparedStatement.executeQuery()) {
                         while (resultSet.next()) {
-                            templates.add(new DbTemplate(resultSet.getInt(1), source));
+                            documents.add(new DbDocument(resultSet.getInt(1), source));
                         }
 
-                        if (templates.isEmpty()) {
+                        if (documents.isEmpty()) {
                             return Collections.EMPTY_LIST;
                         } else {
-                            return templates;
+                            return documents;
 
                         }
                     }
@@ -48,7 +48,7 @@ public class DbTemplates implements Templates {
     }
 
     @Override
-    public Template newTemplate(String name, Name tableName, String username) {
+    public Document newTemplate(String name, Name tableName, String username) {
         int id = templateId.get();
 
         try {
@@ -77,7 +77,7 @@ public class DbTemplates implements Templates {
     }
 
     @Override
-    public Template template(int idTemplate) {
-        return new DbTemplate(idTemplate, source);
+    public Document template(int idTemplate) {
+        return new DbDocument(idTemplate, source);
     }
 }

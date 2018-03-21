@@ -1,6 +1,6 @@
 package ru.ezhov.template.core.template;
 
-import ru.ezhov.template.core.Source;
+import ru.ezhov.template.core.source.Source;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

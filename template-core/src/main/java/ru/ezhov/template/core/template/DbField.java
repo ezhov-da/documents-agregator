@@ -1,21 +1,21 @@
 package ru.ezhov.template.core.template;
 
-import ru.ezhov.template.core.Source;
-import ru.ezhov.template.core.Type;
+import ru.ezhov.template.core.source.Source;
+import ru.ezhov.template.core.FieldType;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public final class DbCell implements Cell {
+public final class DbField implements Field {
 
-    private Template template;
+    private Document document;
     private final int id;
     private final Source<DataSource> source;
 
-    public DbCell(final int id, final Template template, final Source<DataSource> source) {
-        this.template = template;
+    public DbField(final int id, final Document document, final Source<DataSource> source) {
+        this.document = document;
         this.id = id;
         this.source = source;
     }
@@ -27,7 +27,7 @@ public final class DbCell implements Cell {
                              connection.prepareStatement("SELECT NAME FROM T_TEMPLATE_META_INFO WHERE ID = ? AND ID_TEMPLATE = ?;")) {
 
                     preparedStatement.setInt(1, id);
-                    preparedStatement.setInt(2, template.id());
+                    preparedStatement.setInt(2, document.id());
 
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         resultSet.next();
@@ -48,7 +48,7 @@ public final class DbCell implements Cell {
                              connection.prepareStatement("SELECT COLUMN_NAME FROM T_TEMPLATE_META_INFO WHERE ID = ? AND ID_TEMPLATE = ?;")) {
 
                     preparedStatement.setInt(1, id);
-                    preparedStatement.setInt(2, template.id());
+                    preparedStatement.setInt(2, document.id());
 
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         resultSet.next();
@@ -65,7 +65,7 @@ public final class DbCell implements Cell {
         throw new UnsupportedOperationException("OOPS");
     }
 
-    public Type type() {
+    public FieldType type() {
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =
@@ -79,11 +79,11 @@ public final class DbCell implements Cell {
                                      "  t0.ID_TEMPLATE = ?;")) {
 
                     preparedStatement.setInt(1, id);
-                    preparedStatement.setInt(2, template.id());
+                    preparedStatement.setInt(2, document.id());
 
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         resultSet.next();
-                        return Type.valueOf(resultSet.getString(1));
+                        return FieldType.valueOf(resultSet.getString(1));
                     }
                 }
             }
@@ -92,7 +92,7 @@ public final class DbCell implements Cell {
         }
     }
 
-    public void type(Type type) {
+    public void type(FieldType fieldType) {
         throw new UnsupportedOperationException("OOPS");
     }
 
@@ -103,7 +103,7 @@ public final class DbCell implements Cell {
                              connection.prepareStatement("SELECT LENGTH FROM T_TEMPLATE_META_INFO WHERE ID = ? AND ID_TEMPLATE = ?;")) {
 
                     preparedStatement.setInt(1, id);
-                    preparedStatement.setInt(2, template.id());
+                    preparedStatement.setInt(2, document.id());
 
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         resultSet.next();
@@ -127,7 +127,7 @@ public final class DbCell implements Cell {
                              connection.prepareStatement("SELECT ORDERR FROM T_TEMPLATE_META_INFO WHERE ID = ? AND ID_TEMPLATE = ?;")) {
 
                     preparedStatement.setInt(1, id);
-                    preparedStatement.setInt(2, template.id());
+                    preparedStatement.setInt(2, document.id());
 
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         resultSet.next();
@@ -152,7 +152,7 @@ public final class DbCell implements Cell {
                              connection.prepareStatement("SELECT ACTIVE FROM T_TEMPLATE_META_INFO WHERE ID = ? AND ID_TEMPLATE = ?;")) {
 
                     preparedStatement.setInt(1, id);
-                    preparedStatement.setInt(2, template.id());
+                    preparedStatement.setInt(2, document.id());
 
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         resultSet.next();

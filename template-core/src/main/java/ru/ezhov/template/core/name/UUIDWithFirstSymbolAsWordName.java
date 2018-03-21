@@ -1,9 +1,9 @@
-package ru.ezhov.template.core;
+package ru.ezhov.template.core.name;
 
-public final class FirstSymbolAsWordName implements Name {
+public final class UUIDWithFirstSymbolAsWordName implements Name {
     private final Name name;
 
-    public FirstSymbolAsWordName(Name name) {
+    public UUIDWithFirstSymbolAsWordName(Name name) {
         this.name = name;
     }
 

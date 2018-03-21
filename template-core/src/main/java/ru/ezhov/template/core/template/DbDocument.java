@@ -1,8 +1,8 @@
 package ru.ezhov.template.core.template;
 
-import ru.ezhov.template.core.Name;
-import ru.ezhov.template.core.Source;
-import ru.ezhov.template.core.Type;
+import ru.ezhov.template.core.name.Name;
+import ru.ezhov.template.core.source.Source;
+import ru.ezhov.template.core.FieldType;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DbTemplate implements Template {
+public class DbDocument implements Document {
 
     private int id;
     private Source<DataSource> source;
 
-    public DbTemplate(int id, Source<DataSource> source) {
+    public DbDocument(int id, Source<DataSource> source) {
         this.id = id;
         this.source = source;
     }
@@ -126,8 +126,8 @@ public class DbTemplate implements Template {
     }
 
     @Override
-    public List<Cell> allCells() {
-        List<Cell> cells = new ArrayList<>();
+    public List<Field> allCells() {
+        List<Field> fields = new ArrayList<>();
 
         try {
             try (Connection connection = source.get().getConnection()) {
@@ -139,10 +139,10 @@ public class DbTemplate implements Template {
                     try (ResultSet resultSet = preparedStatement.executeQuery();) {
                         while (resultSet.next()) {
                             int id = resultSet.getInt(1);
-                            cells.add(new DbCell(id, this, source));
+                            fields.add(new DbField(id, this, source));
                         }
 
-                        return cells;
+                        return fields;
                     }
                 }
             }
@@ -152,7 +152,7 @@ public class DbTemplate implements Template {
     }
 
     @Override
-    public Cell addCell(String name, Name columnName, Type type, int length, Order order, String username) {
+    public Field addCell(String name, Name columnName, FieldType fieldType, int length, Order order, String username) {
         try {
             try (Connection connection = source.get().getConnection()) {
                 try (PreparedStatement preparedStatement =
@@ -170,7 +170,7 @@ public class DbTemplate implements Template {
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, name);
                     preparedStatement.setString(3, columnName.get());
-                    preparedStatement.setInt(4, type.id());
+                    preparedStatement.setInt(4, fieldType.id());
                     preparedStatement.setInt(5, length);
                     preparedStatement.setString(6, order.value());
                     preparedStatement.setString(7, username);
@@ -196,13 +196,13 @@ public class DbTemplate implements Template {
     }
 
     @Override
-    public Cell cell(int id) {
-        return new DbCell(id, this, source);
+    public Field cell(int id) {
+        return new DbField(id, this, source);
     }
 
     @Override
     public String toString() {
-        return "DbTemplate{" +
+        return "DbDocument{" +
                 "id=" + id +
                 '}';
     }

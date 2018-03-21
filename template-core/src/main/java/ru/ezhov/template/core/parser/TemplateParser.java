@@ -3,7 +3,7 @@ package ru.ezhov.template.core.parser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import ru.ezhov.template.core.template.Template;
+import ru.ezhov.template.core.template.Document;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -17,10 +17,10 @@ public class TemplateParser implements Parser {
     private static final Logger LOG = Logger.getLogger(TemplateParser.class.getName());
 
     private InputStream src;
-    private Template template;
+    private Document document;
 
-    public TemplateParser(Template template, InputStream src) {
-        this.template = template;
+    public TemplateParser(Document document, InputStream src) {
+        this.document = document;
         this.src = src;
     }
 

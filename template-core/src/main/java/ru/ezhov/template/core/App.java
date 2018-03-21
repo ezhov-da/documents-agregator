@@ -2,6 +2,10 @@ package ru.ezhov.template.core;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import ru.ezhov.template.core.name.DefaultName;
+import ru.ezhov.template.core.name.Name;
+import ru.ezhov.template.core.source.H2Source;
+import ru.ezhov.template.core.source.Source;
 import ru.ezhov.template.core.template.*;
 
 import java.util.logging.Logger;
@@ -22,19 +26,19 @@ public class App {
                     .forEach(System.out::println);
 
 
-            Name name = new StandartName();
+            Name name = new DefaultName();
 
-            Template template = templates.newTemplate("тест иииия", name, "ezhov_da");
-            template.addCell("вау", name, Type.STRING, 100, Order._05, "ezhov_da");
+            Document document = templates.newTemplate("тест иииия", name, "ezhov_da");
+            document.addCell("вау", name, FieldType.STRING, 100, Order._05, "ezhov_da");
 
-            template.allCells().forEach(c -> {
+            document.allCells().forEach(c -> {
                 System.out.println(c.name());
                 System.out.println(c.columnName());
                 System.out.println(c.order());
                 System.out.println(c.type());
             });
 
-            System.out.println(template);
+            System.out.println(document);
 
             templates
                     .all()
