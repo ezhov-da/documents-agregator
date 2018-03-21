@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.ezhov</groupId>
-    <artifactId>document-agregator</artifactId>
+    <artifactId>documents-agregator</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>document-core</module>
-        <module>document-server</module>
+        <module>documents-core</module>
+        <module>documents-server</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -17,7 +17,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
