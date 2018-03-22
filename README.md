@@ -1,4 +1,4 @@
-# document-agregator
+# documents-agregator
 
 Приложение для агрегирования поступающих документов.
 
