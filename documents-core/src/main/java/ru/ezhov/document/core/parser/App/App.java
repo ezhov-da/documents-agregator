@@ -1,21 +1,17 @@
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+package ru.ezhov.reader;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-interface InputDoc {
-    void readRow(Callback callback) throws Exception;
-}
-
-interface Callback<T> {
-    T call(T v);
+interface InputDoc<T> {
+    Iterator<T> iterator() throws XMLStreamException;
 }
 
 /**
@@ -26,86 +22,123 @@ public class App {
 
     public static void main(String[] args) {
         InputDoc inputDoc = new XmlInputDoc(App.class.getResourceAsStream("/doc.xml"));
-        Callback<List<Object>> callback = v -> {
-            v.forEach(t -> System.out.println(t));
-            return v;
-        };
-
         try {
-            inputDoc.readRow(callback);
+            Iterator<List<String>> iterator = inputDoc.iterator();
+            while (iterator.hasNext()) {
+                List<String> strings = iterator.next();
+                strings.forEach(v -> System.out.println(v));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
 
-final class XmlInputDoc implements InputDoc {
-
+final class XmlInputDoc implements InputDoc<List<String>> {
     private final InputStream is;
-    private final DefaultHandler defaultHandler;
-    private Callback callback;
+
+    private boolean startRow;
+    private boolean endRow;
+    private boolean startColumn;
+    private boolean endColumn;
+    private String val;
+
+    private List<Object> columns = new ArrayList<>();
 
     public XmlInputDoc(InputStream is) {
         this.is = is;
-        this.defaultHandler = new OwnDefaultHandler();
     }
 
-    @Override
-    public void readRow(Callback callback) throws Exception {
-        this.callback = callback;
-        try {
-            SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-            saxParser.parse(is, defaultHandler);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public Iterator iterator() throws XMLStreamException {
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        factory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
+        XMLStreamReader reader = factory.createXMLStreamReader(is);
 
-    private class OwnDefaultHandler extends DefaultHandler {
-        private boolean startRow;
-        private boolean endRow;
-        private boolean startColumn;
-        private boolean endColumn;
-        private String val;
+        return new Iterator() {
+            @Override
+            public boolean hasNext() {
+                try {
+                    boolean hasNext = false;
+                    boolean breakFlag = false;
+                    try {
+                        int event = reader.getEventType();
 
-        private List<Object> columns = new ArrayList<>();
+                        columns = new ArrayList<>();
 
-        @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            if (qName.equals("r")) {
-                startRow = true;
-            } else if (qName.equals("c")) {
-                startColumn = true;
+                        while (true) {
+
+                            String elementName;
+
+                            switch (event) {
+                                case XMLStreamConstants.START_ELEMENT:
+                                    elementName = reader.getLocalName();
+                                    if ("r".equals(elementName)) {
+                                        startRow = true;
+                                    } else if ("c".equals(elementName)) {
+                                        startColumn = true;
+                                    }
+                                    break;
+
+                                case XMLStreamConstants.END_ELEMENT:
+                                    elementName = reader.getLocalName();
+                                    if ("r".equals(elementName)) {
+                                        endRow = true;
+                                    } else if ("c".equals(elementName)) {
+                                        endColumn = true;
+                                    }
+
+                                    if (startColumn && endColumn) {
+                                        columns.add(val);
+                                        endColumn = false;
+                                    }
+
+                                    if (startRow && endRow) {
+                                        startRow = false;
+                                        endRow = false;
+                                        startColumn = false;
+                                        endColumn = false;
+
+                                        hasNext = true;
+                                        breakFlag = true;
+                                    }
+                                    break;
+
+                                case XMLStreamConstants.CHARACTERS:
+                                    if (reader.isWhiteSpace())
+                                        break;
+
+                                    val = reader.getText();
+                                    break;
+                            }
+
+                            if (!reader.hasNext()) {
+                                return hasNext;
+                            }
+
+                            event = reader.next();
+
+                            if (breakFlag) {
+                                //проверка наполненности строки
+                                break;
+                            }
+
+                        }
+
+                        return hasNext;
+                    } finally {
+                        if (!hasNext) {
+                            reader.close();
+                        }
+                    }
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
-        }
 
-        @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
-            if (qName.equals("r")) {
-                endRow = true;
-            } else if (qName.equals("c")) {
-                endColumn = true;
+            @Override
+            public Object next() {
+                return columns;
             }
-
-            if (startColumn && endColumn) {
-                columns.add(val);
-                endColumn = false;
-            }
-
-            if (startRow && endRow) {
-                callback.call(columns);
-                columns.removeAll(columns);
-                startRow = false;
-                endRow = false;
-                startColumn = false;
-                endColumn = false;
-            }
-        }
-
-        @Override
-        public void characters(char[] ch, int start, int length) throws SAXException {
-            char[] chCopy = Arrays.copyOfRange(ch, start, start + length);
-            val = new String(chCopy);
-        }
+        };
     }
 }
