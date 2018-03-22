@@ -1,9 +1,6 @@
-package ru.ezhov.document.core;
+package ru.ezhov.document.core.name;
 
 import org.junit.Test;
-import ru.ezhov.document.core.name.Name;
-import ru.ezhov.document.core.name.UuidName;
-import ru.ezhov.document.core.name.UuidWithFirstSymbolAsWordName;
 
 import static org.junit.Assert.assertTrue;
 
@@ -14,7 +11,7 @@ public class UuidWithFirstSymbolAsWordNameTest {
         String firstWord = name.get().substring(0, 1);
         System.out.println(firstWord);
 
-        assertTrue("".equals(firstWord.replaceFirst("\\w", "")));
+        assertTrue("".equals(firstWord.replaceFirst("^[a-z]", "")));
     }
 
 }

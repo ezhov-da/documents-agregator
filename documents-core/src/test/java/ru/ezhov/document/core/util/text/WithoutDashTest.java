@@ -1,4 +1,4 @@
-package ru.ezhov.document.core;
+package ru.ezhov.document.core.util.text;
 
 import org.junit.Test;
 import ru.ezhov.document.core.util.text.Text;

@@ -12,7 +12,7 @@ public interface Documents {
 
     Document newDocument(String name, Name tableName, String username);
 
-    Document document(int idTemplate);
+    Document document(int idDocument);
 
     //TODO: обновление шаблона
     //TODO: удаление шаблона

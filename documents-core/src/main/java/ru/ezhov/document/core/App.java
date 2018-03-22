@@ -1,13 +1,20 @@
 package ru.ezhov.document.core;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import ru.ezhov.document.core.document.*;
+import ru.ezhov.document.core.inputdoc.InputDoc;
+import ru.ezhov.document.core.inputdoc.ValidStringInputDoc;
+import ru.ezhov.document.core.inputdoc.XmlInputDoc;
 import ru.ezhov.document.core.name.ColumnName;
 import ru.ezhov.document.core.name.TableName;
 import ru.ezhov.document.core.source.H2Source;
 import ru.ezhov.document.core.source.Source;
+import ru.ezhov.document.core.table.h2.H2CreateTableQueryText;
+import ru.ezhov.document.core.table.h2.H2InsertTableQueryText;
+import ru.ezhov.document.core.util.db.StatementQuery;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
 /**
@@ -18,57 +25,42 @@ public class App {
 
     public static void main(String[] args) {
         try {
+            //Получение источника
             Source source = new H2Source();
+
+            //Получение хранилища документов
             Documents documents = new DbDocuments(new DbDocumentId(source), source);
 
-            documents
-                    .all()
-                    .forEach(System.out::println);
+            //Создание нового документа
+            Document document = documents.newDocument("рандомное имя: " + Math.random(), new TableName(), "ezhov_da");
 
-            Document document = documents.newDocument("тест иииия" + Math.random(), new TableName(), "ezhov_da");
-            document.addField("вау", new ColumnName(), "тестовое описание", FieldType.STRING, 100, Order._05, "ezhov_da");
+            //Добавление полей
+            document.addField("Код", new ColumnName(), "-", FieldType.STRING, 100, Order._00, "ezhov_da");
+            document.addField("Название", new ColumnName(), "+", FieldType.STRING, 100, Order._01, "ezhov_da");
+            document.addField("Количество", new ColumnName(), "*", FieldType.INTEGER, 100, Order._02, "ezhov_da");
 
-            document.fields().forEach(c -> {
-                System.out.println(c.name());
-                System.out.println(c.columnName());
-                System.out.println(c.order());
-                System.out.println(c.type());
-            });
+            //Создание хранилища данных для сгенерированного документа
+            new StatementQuery(new H2CreateTableQueryText(document), source).execute();
 
-            System.out.println(document);
+            //Получение входного документа
+            InputDoc inputDoc = new XmlInputDoc(
+                    new FileInputStream(
+                            new File("documents-sources-examples/document.xml")
+                    )
+            );
 
-            documents
-                    .all()
-                    .forEach(System.out::println);
-
-        } catch (Exception e) {
+            //полная обработка
+            new DbDocumentData(
+                    document,
+                    new ValidStringInputDoc(
+                            document,
+                            inputDoc
+                    ),
+                    new H2InsertTableQueryText(document),
+                    source
+            ).put();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-
-
-    }
-
-
-    private void oldCode() {
-        //App app = new App();
-        //String jsonRaw = testJSon();
-        //JsonParser parser = new JsonParser();
-        //JsonElement jsonElement = parser.parse(jsonRaw);
-        //processArray(jsonElement);
-        //System.out.println(document.rowCount());
-        //Workbook workbook = new Workbook(new Sheet());
-    }
-
-    public void processArray(JsonElement jsonElement) {
-        JsonArray jsonArray = jsonElement.getAsJsonArray();
-        int size = jsonArray.size();
-        for (int i = 0; i < size; i++) {
-            JsonElement element = jsonArray.get(i);
-            if (element.isJsonArray()) {
-                processArray(element);
-            } else {
-                System.out.println(element.getAsString());
-            }
         }
     }
 }

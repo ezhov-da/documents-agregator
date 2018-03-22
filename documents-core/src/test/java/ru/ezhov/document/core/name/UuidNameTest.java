@@ -1,8 +1,6 @@
-package ru.ezhov.document.core;
+package ru.ezhov.document.core.name;
 
 import org.junit.Test;
-import ru.ezhov.document.core.name.Name;
-import ru.ezhov.document.core.name.UuidName;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -12,6 +10,7 @@ public class UuidNameTest {
         Name name = new UuidName();
         String nameText = name.get();
         System.out.println(nameText);
+
         assertNotNull(name);
     }
 }

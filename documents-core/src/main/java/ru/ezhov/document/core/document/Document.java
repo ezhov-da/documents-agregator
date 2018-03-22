@@ -30,6 +30,6 @@ public interface Document {
 
     Field field(int id);
 
-    //TODO: обновление ячейки
-    //TODO: удаление ячейки
+    //TODO: обновление поля
+    //TODO: удаление поля (ACTIVE - false)
 }

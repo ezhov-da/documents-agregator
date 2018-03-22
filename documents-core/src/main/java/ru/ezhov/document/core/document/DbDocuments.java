@@ -2,6 +2,7 @@ package ru.ezhov.document.core.document;
 
 import ru.ezhov.document.core.name.Name;
 import ru.ezhov.document.core.source.Source;
+import ru.ezhov.document.core.table.CreateTableQueryText;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -15,10 +16,12 @@ public class DbDocuments implements Documents {
 
     private Source<DataSource> source;
     private DocumentId templateId;
+    private CreateTableQueryText createTableText;
 
     public DbDocuments(final DocumentId templateId, final Source<DataSource> source) {
         this.source = source;
         this.templateId = templateId;
+        this.createTableText = createTableText;
     }
 
     @Override

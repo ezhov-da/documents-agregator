@@ -1,18 +1,19 @@
-package ru.ezhov.document.core.table;
+package ru.ezhov.document.core.table.h2;
 
 import ru.ezhov.document.core.FieldType;
 import ru.ezhov.document.core.document.Document;
 import ru.ezhov.document.core.document.Field;
+import ru.ezhov.document.core.table.CreateTableQueryText;
 import ru.ezhov.document.core.util.text.Text;
 import ru.ezhov.document.core.util.text.TextOf;
 
 import java.util.List;
 
-public final class H2TableText implements TableText {
+public final class H2CreateTableQueryText implements CreateTableQueryText {
 
     private final Document document;
 
-    public H2TableText(Document document) {
+    public H2CreateTableQueryText(Document document) {
         this.document = document;
     }
 
@@ -22,28 +23,31 @@ public final class H2TableText implements TableText {
     }
 
     private String buildQueryText() {
-        String head = "CREATE TABLE %1$s (\n";
-        String end = ")";
+        String query = "CREATE TABLE %1$s (%2$s)";
         String tableName = document.tableName();
         List<Field> fields = document.fields();
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(String.format(head, tableName));
         int size = fields.size();
         for (int i = 0; i < size; i++) {
             Field field = fields.get(i);
             stringBuilder.append(buildColumn(field));
             if (i + 1 < size) {
-                stringBuilder.append(",");
+                stringBuilder.append(", ");
             }
-            stringBuilder.append("\n");
         }
-        stringBuilder.append(end);
-        return stringBuilder.toString();
+
+        String queryText = String.format(
+                query,
+                tableName,
+                stringBuilder.toString()
+        );
+
+        return queryText;
     }
 
     private String buildColumn(Field field) {
-        String columnPattern = "\t%1$s %2$s";
+        String columnPattern = "%1$s %2$s";
         String column;
 
         FieldType fieldType = field.type();
