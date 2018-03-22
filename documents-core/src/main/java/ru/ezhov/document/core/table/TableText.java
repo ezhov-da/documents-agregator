@@ -3,7 +3,7 @@ package ru.ezhov.document.core.table;
 import ru.ezhov.document.core.util.text.Text;
 
 public interface TableText {
-    Text create();
+    Text text();
     
-    Text insert();
+    Text insert(); //хотя скорее вынести в другой класс и назвать класс как InsertTableText
 }
