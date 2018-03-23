@@ -1,7 +1,7 @@
 // Как видит программист объект:
 class Render {
     public String getHtml() {
-        return "<html>o, no<html>";
+        return "<html>o, no</html>";
     }
 
     public String getJson() {
@@ -12,15 +12,13 @@ class Render {
 // Как видит ООП программист этот же объект:
 class BigFunction {
     public String liltleFunctionOne() {
-        return "one";
+        return "<html>i,m cry</html>";
     }
 
     public String liltleFunctionTwo() {
-        return "two";
+        return "{'text':'i,m cry too'}";
     }
 }
-
-
 
 //Что сделает ООП программист
 interface View {
@@ -31,7 +29,7 @@ class HtmlView implements View {
 
     @Override
     public String asString() {
-        return "<html>o, yes<html>";
+        return "<html>o, yes</html>";
     }
 }
 
