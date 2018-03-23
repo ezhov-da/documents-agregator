@@ -48,6 +48,7 @@ public final class XmlInputDoc implements InputDoc<Row<String>> {
                                         } else if ("c".equals(elementName)) {
                                             startColumn = true;
                                         }
+
                                         break;
                                     case XMLStreamConstants.END_ELEMENT:
                                         elementName = reader.getLocalName();
@@ -57,6 +58,7 @@ public final class XmlInputDoc implements InputDoc<Row<String>> {
                                             endColumn = true;
                                         }
                                         if (startColumn && endColumn) {
+
                                             columns.add(val);
                                             endColumn = false;
                                         }
@@ -105,5 +107,6 @@ public final class XmlInputDoc implements InputDoc<Row<String>> {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+//TODO: закрывать поток, а так же подумать о Closable в инитерфейсе
     }
 }
