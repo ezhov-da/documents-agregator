@@ -10,16 +10,15 @@ class Test {
 
         new Document(new DocumentData()).createData();
         new Document(new DocumentData()).editData();
+        new Document(new DocumentData()).deleteData();
 
         Fields fields = new Document().fields();
-        new Document(new Fields()).createFields();
-        new Document(new Fields()).editFields();
-
         //----------------------------------------------------------------------
 
         Iterator<Field> itFields = new Fields().all();
         Iterator<Field> itFields field = new Fields(new Field(), Arrays.asList(new Field())).addField();
         Iterator<Field> itFields field = new Fields(new Field(), Arrays.asList(new Field())).editField();
+        Iterator<Field> itFields field = new Fields(new Field(), Arrays.asList(new Field())).deleteField();
 
         //----------------------------------------------------------------------
 

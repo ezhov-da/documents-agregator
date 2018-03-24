@@ -2,7 +2,9 @@ package ru.ezhov.document.core.inputdoc;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,17 +19,20 @@ public final class XmlInputDoc implements InputDoc<Row<String>> {
     private boolean endColumn;
     private String val;
 
+    private XMLStreamReader reader;
+
     private List<String> columns = new ArrayList<>();
 
     public XmlInputDoc(InputStream is) {
         this.is = is;
     }
 
+
     public Iterator<Row<String>> rows() {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             factory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
-            XMLStreamReader reader = factory.createXMLStreamReader(is);
+            reader = factory.createXMLStreamReader(is);
 
             return new Iterator() {
                 @Override
@@ -107,6 +112,16 @@ public final class XmlInputDoc implements InputDoc<Row<String>> {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-//TODO: закрывать поток, а так же подумать о Closable в инитерфейсе
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (XMLStreamException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

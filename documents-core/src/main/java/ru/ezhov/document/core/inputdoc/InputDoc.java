@@ -1,5 +1,6 @@
 package ru.ezhov.document.core.inputdoc;
 
+import java.io.Closeable;
 import java.util.Iterator;
 
 /**
@@ -7,6 +8,6 @@ import java.util.Iterator;
  *
  * @param <T> - возвращаемый тип строки
  */
-public interface InputDoc<T> {
+public interface InputDoc<T> extends Closeable {
     Iterator<T> rows();
 }

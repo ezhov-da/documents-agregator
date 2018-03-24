@@ -14,7 +14,6 @@ import ru.ezhov.document.core.util.db.StatementQuery;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
 /**
@@ -42,24 +41,30 @@ public class App {
             //Создание хранилища данных для сгенерированного документа
             new StatementQuery(new H2CreateTableQueryText(document), source).execute();
 
-            //Получение входного документа
-            InputDoc inputDoc = new XmlInputDoc(
-                    new FileInputStream(
-                            new File("documents-sources-examples/document.xml")
-                    )
-            );
 
-            //полная обработка
-            new DbDocumentData(
-                    document,
-                    new ValidStringInputDoc(
-                            document,
-                            inputDoc
-                    ),
-                    new H2InsertTableQueryText(document),
-                    source
-            ).put();
-        } catch (FileNotFoundException e) {
+            //Получение входного документа
+            try (InputDoc inputDoc =
+                         new XmlInputDoc(
+                                 new FileInputStream(
+                                         new File("documents-sources-examples/document.xml")
+                                 )
+                         )
+            ) {
+                //полная обработка
+                new DbDocumentData(
+                        document,
+                        new ValidStringInputDoc(
+                                document,
+                                inputDoc
+                        ),
+                        new H2InsertTableQueryText(document),
+
+                        source
+                ).
+
+                        put();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
