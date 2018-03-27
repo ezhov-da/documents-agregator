@@ -1,10 +1,8 @@
 package ru.ezhov.document.core.document;
 
-import ru.ezhov.document.core.FieldType;
-import ru.ezhov.document.core.name.Name;
+import ru.ezhov.document.core.document.fields.Fields;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ezhov_da on 19.03.2018.
@@ -14,22 +12,27 @@ public interface Document {
 
     String name();
 
+    void name(String name);
+
     boolean active();
+
+    void active(boolean active);
 
     String tableName();
 
+    void tableName(String tableName);
+
     String username();
+
+    void username(String username);
 
     Date addDt();
 
+    void addDt(Date addDt);
+
     String description();
 
-    List<Field> fields();
+    void description(String description);
 
-    Field addField(String name, Name columnName, String description, FieldType fieldType, int length, Order order, String username);
-
-    Field field(int id);
-
-    //TODO: обновление поля
-    //TODO: удаление поля (ACTIVE - false)
+    Fields fields();
 }

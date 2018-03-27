@@ -1,7 +1,5 @@
 package ru.ezhov.document.core.document;
 
-import ru.ezhov.document.core.name.Name;
-
 import java.util.List;
 
 /**
@@ -10,10 +8,11 @@ import java.util.List;
 public interface Documents {
     List<Document> all();
 
-    Document newDocument(String name, Name tableName, String username);
+    Document newDoc(DocumentId documentId, Document document);
 
     Document document(int idDocument);
 
-    //TODO: обновление шаблона
-    //TODO: удаление шаблона
+    Document edit(Document document);
+
+    Document delete(int idDocument);
 }

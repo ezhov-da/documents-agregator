@@ -5,8 +5,10 @@ class Test {
         Iterator<Document> iterator = new Documents().all();
         Document document = new Documents(new Document()).create();
         Document document = new Documents(new Document()).edit();
-
+        Document document = new Documents(new Document()).delete();
         //----------------------------------------------------------------------
+
+        new Document(new DocumentData()).delete();
 
         new Document(new DocumentData()).createData();
         new Document(new DocumentData()).editData();

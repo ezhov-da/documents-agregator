@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class DbDocuments implements Documents {
 
@@ -82,5 +83,20 @@ public class DbDocuments implements Documents {
     @Override
     public Document document(int idTemplate) {
         return new DbDocument(idTemplate, source);
+    }
+
+    @Override
+    public Document create(int id, Map<Document.Data, Object> params) {
+        return null;
+    }
+
+    @Override
+    public Document edit(int id, Map<Document.Data, Object> params) {
+        return null;
+    }
+
+    @Override
+    public Document delete(int idDocument) {
+        return null;
     }
 }

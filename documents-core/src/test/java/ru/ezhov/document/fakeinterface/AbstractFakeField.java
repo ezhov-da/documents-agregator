@@ -1,7 +1,7 @@
 package ru.ezhov.document.fakeinterface;
 
 import ru.ezhov.document.core.FieldType;
-import ru.ezhov.document.core.document.Field;
+import ru.ezhov.document.core.document.fields.Field;
 import ru.ezhov.document.core.document.Order;
 
 public abstract class AbstractFakeField implements Field {

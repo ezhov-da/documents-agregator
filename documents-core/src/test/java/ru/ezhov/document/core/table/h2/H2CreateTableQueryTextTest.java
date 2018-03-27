@@ -3,7 +3,7 @@ package ru.ezhov.document.core.table.h2;
 import org.junit.Test;
 import ru.ezhov.document.core.FieldType;
 import ru.ezhov.document.core.document.Document;
-import ru.ezhov.document.core.document.Field;
+import ru.ezhov.document.core.document.fields.Field;
 import ru.ezhov.document.core.table.QueryText;
 import ru.ezhov.document.core.util.text.Text;
 import ru.ezhov.document.fakeinterface.AbstractFakeDocument;

@@ -1,5 +1,6 @@
 package ru.ezhov.document.core.document;
 
+import ru.ezhov.document.core.document.fields.Field;
 import ru.ezhov.document.core.inputdoc.Row;
 import ru.ezhov.document.core.inputdoc.ValidInputDoc;
 import ru.ezhov.document.core.source.Source;

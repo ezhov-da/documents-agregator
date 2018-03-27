@@ -1,7 +1,7 @@
 package ru.ezhov.document.core.table.h2;
 
 import ru.ezhov.document.core.document.Document;
-import ru.ezhov.document.core.document.Field;
+import ru.ezhov.document.core.document.fields.Field;
 import ru.ezhov.document.core.table.InsertTableQueryText;
 import ru.ezhov.document.core.util.text.Text;
 import ru.ezhov.document.core.util.text.TextOf;

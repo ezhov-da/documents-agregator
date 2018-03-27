@@ -1,6 +1,7 @@
 package ru.ezhov.document.core;
 
 import ru.ezhov.document.core.document.*;
+import ru.ezhov.document.core.document.fields.Fields;
 import ru.ezhov.document.core.inputdoc.InputDoc;
 import ru.ezhov.document.core.inputdoc.ValidStringInputDoc;
 import ru.ezhov.document.core.inputdoc.XmlInputDoc;
@@ -24,6 +25,20 @@ public class App {
 
     public static void main(String[] args) {
         try {
+
+            Document document = new DocumentTest();
+            Fields fields = document.fields();
+            fields.
+
+
+
+
+
+
+
+
+
+
             //Получение источника
             Source source = new H2Source();
 

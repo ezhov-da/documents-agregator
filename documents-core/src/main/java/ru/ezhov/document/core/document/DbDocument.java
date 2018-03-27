@@ -1,14 +1,14 @@
 package ru.ezhov.document.core.document;
 
-import ru.ezhov.document.core.FieldType;
-import ru.ezhov.document.core.name.Name;
+import ru.ezhov.document.core.document.fields.DbFields;
+import ru.ezhov.document.core.document.fields.Fields;
 import ru.ezhov.document.core.source.Source;
 
 import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
-import java.util.List;
 
 public class DbDocument implements Document {
 
@@ -147,80 +147,8 @@ public class DbDocument implements Document {
     }
 
     @Override
-    public List<Field> fields() {
-        List<Field> fields = new ArrayList<>();
-
-        try {
-            try (Connection connection = source.get().getConnection()) {
-                try (PreparedStatement preparedStatement =
-                             connection.prepareStatement(
-                                     "SELECT t0.ID FROM T_DOCUMENT_FIELD t0 WHERE t0.ID_DOCUMENT = ?;")) {
-
-                    preparedStatement.setInt(1, id);
-                    try (ResultSet resultSet = preparedStatement.executeQuery();) {
-                        while (resultSet.next()) {
-                            int id = resultSet.getInt(1);
-                            fields.add(new DbField(id, this, source));
-                        }
-
-                        return fields;
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public Field addField(String name, Name columnName, String description, FieldType fieldType, int length, Order order, String username) {
-        try {
-            try (Connection connection = source.get().getConnection()) {
-                try (PreparedStatement preparedStatement =
-                             connection.prepareStatement(
-                                     "INSERT INTO T_DOCUMENT_FIELD (\n" +
-                                             "  ID_DOCUMENT,\n" +
-                                             "  NAME,\n" +
-                                             "  DESCRIPTION,\n" +
-                                             "  COLUMN_NAME,\n" +
-                                             "  ID_FIELD_TYPE,\n" +
-                                             "  LENGTH,\n" +
-                                             "  ORDERR,\n" +
-                                             "  USERNAME\n" +
-                                             ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-
-                    preparedStatement.setInt(1, id);
-                    preparedStatement.setString(2, name);
-                    preparedStatement.setString(3, description);
-                    preparedStatement.setString(4, columnName.get());
-                    preparedStatement.setInt(5, fieldType.id());
-                    preparedStatement.setInt(6, length);
-                    preparedStatement.setString(7, order.value());
-                    preparedStatement.setString(8, username);
-
-                    int affectedRows = preparedStatement.executeUpdate();
-
-                    if (affectedRows == 0) {
-                        throw new RuntimeException(new SQLException("Ячейка не добавлена в шаблон"));
-                    }
-
-                    try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            return field(generatedKeys.getInt(1));
-                        } else {
-                            throw new RuntimeException(new SQLException("Ячейка не добавлена в шаблон"));
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public Field field(int id) {
-        return new DbField(id, this, source);
+    public Fields fields() {
+        return new DbFields(id, source);
     }
 
     @Override
