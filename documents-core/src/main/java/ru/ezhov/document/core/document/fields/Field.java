@@ -4,7 +4,27 @@ public interface Field {
 
     int id();
 
-    Object data();
+    int idDocument();
 
-    void save();
+    String name();
+        
+        String description();
+        
+        boolean active();
+        
+        boolean key();
+        
+        String columnName();
+        
+        FieldType type();
+        
+        int length();
+        
+        boolean empty();
+        
+        Order order();
+        
+        String username();
+        
+        Date addDt();
 }
