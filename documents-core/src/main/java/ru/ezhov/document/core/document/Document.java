@@ -14,7 +14,6 @@ public interface Document {
 
     boolean active();
 
-
     String tableName();
 
     String username();
@@ -24,4 +23,10 @@ public interface Document {
     String description();
 
     Fields fields();
+    
+    DocumentData documentData();
+    
+    void add(DocumentData documentData);
+    void edit(DocumentData documentData);
+    void delete(DocumentData documentData);
 }
