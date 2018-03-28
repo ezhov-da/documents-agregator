@@ -8,11 +8,9 @@ import java.util.List;
 public interface Documents {
     List<Document> all();
 
-    Document newDoc(DocumentId documentId, Document document);
-
     Document document(int idDocument);
     
-    Document create(Document document);
+    Document create(DocumentId documentId, Document document);
 
     Document edit(Document document);
 
