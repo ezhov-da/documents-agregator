@@ -11,6 +11,8 @@ public interface Documents {
     Document newDoc(DocumentId documentId, Document document);
 
     Document document(int idDocument);
+    
+    Document create(Document document);
 
     Document edit(Document document);
 
