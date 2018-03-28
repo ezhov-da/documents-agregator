@@ -12,27 +12,16 @@ public interface Document {
 
     String name();
 
-    void name(String name);
-
     boolean active();
 
-    void active(boolean active);
 
     String tableName();
 
-    void tableName(String tableName);
-
     String username();
-
-    void username(String username);
 
     Date addDt();
 
-    void addDt(Date addDt);
-
     String description();
-
-    void description(String description);
 
     Fields fields();
 }
