@@ -18,7 +18,7 @@ public final class StatementQuery implements Query {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws Exception {
         System.out.println(query.text().asString());
 
         try (Connection connection = source.get().getConnection()) {

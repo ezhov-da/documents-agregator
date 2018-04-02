@@ -39,7 +39,7 @@ CREATE UNIQUE INDEX INDEX_DOCUMENT
 --====================================================================================
 DROP TABLE IF EXISTS T_DOCUMENT_FIELD;
 CREATE TABLE IF NOT EXISTS T_DOCUMENT_FIELD (
-  ID            INT          NOT NULL             AUTO_INCREMENT PRIMARY KEY,
+  ID            INT          NOT NULL                         AUTO_INCREMENT PRIMARY KEY,
   /*ID документа*/
   ID_DOCUMENT   INT          NOT NULL,
   /*название*/
@@ -50,8 +50,9 @@ CREATE TABLE IF NOT EXISTS T_DOCUMENT_FIELD (
     активно ли поле в документе,
     в зависимости от этого будет возможность в него добавлять,
     если же это поле еще и ключ, то еще и искать по нему
+    ключ нельзя сделать неактивным
     */
-  ACTIVE        BOOLEAN   NOT NULL                        DEFAULT TRUE,
+  ACTIVE        BOOLEAN      NOT NULL                         DEFAULT TRUE,
   /*является ли ключом данное поле,
   ! ВАЖНО
     - это значение после установки изменить нельзя,
@@ -61,16 +62,17 @@ CREATE TABLE IF NOT EXISTS T_DOCUMENT_FIELD (
     может произойти так, что изначально поле было создано ключом, затем его сделали неактивным,
     следовательно оно перестало восприниматься как ключ, и может появиться много дублей, что неверно,
     скорее всего, необходимо сделать просто другой шаблон с возможностью удаления этого поля как ключа
+    ключ задается один раз и навсегда
   */
-  KEY        BOOLEAN  NOT NULL                         DEFAULT FALSE,
+  KEY           BOOLEAN      NOT NULL                         DEFAULT FALSE,
   /*название сгенерированного столбца для создания таблицы*/
   COLUMN_NAME   VARCHAR(50)  NOT NULL,
-  /*ID типа поля из таблицы T_DOCUMENT_FIELD_TYPE*/
+  /*ID типа поля из таблицы T_DOCUMENT_FIELD_TYPE (тип поля не меняется)*/
   ID_FIELD_TYPE INT          NOT NULL,
   /*длина поля для таблицы*/
-  LENGTH        INT          NOT NULL             DEFAULT 1,
-  /*может ли быть быть поле пустое*/
-  EMPTY         BOOLEAN      NOT NULL             DEFAULT TRUE,
+  LENGTH        INT          NOT NULL                         DEFAULT 1,
+  /*может ли быть поле пустое, если это поле ключ, то оно не может быть пустое*/
+  EMPTY         BOOLEAN      NOT NULL                         DEFAULT TRUE,
   /*
     сортировка при выводе, поле не должно быть повторяющееся в разрезе документа
   */
@@ -78,7 +80,7 @@ CREATE TABLE IF NOT EXISTS T_DOCUMENT_FIELD (
   /*пользователь, который создал*/
   USERNAME      VARCHAR(100) NOT NULL,
   /*дата создания*/
-  ADD_DT        TIMESTAMP    NOT NULL             DEFAULT NOW(),
+  ADD_DT        TIMESTAMP    NOT NULL                         DEFAULT NOW(),
   FOREIGN KEY (ID_DOCUMENT) REFERENCES T_DOCUMENT (ID)
   ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (ID_FIELD_TYPE) REFERENCES T_DOCUMENT_FIELD_TYPE (ID)

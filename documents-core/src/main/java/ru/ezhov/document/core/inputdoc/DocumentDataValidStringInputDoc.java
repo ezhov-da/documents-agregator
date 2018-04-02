@@ -1,26 +1,25 @@
 package ru.ezhov.document.core.inputdoc;
 
-import ru.ezhov.document.core.document.Document;
+import ru.ezhov.document.core.document.DocumentData;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ValidStringInputDoc implements ValidInputDoc<Object> {
+public class DocumentDataValidStringInputDoc implements DocumentData {
 
-    private final Document document;
     private final InputDoc<Row<String>> inputDoc;
 
-    public ValidStringInputDoc(Document document, InputDoc<Row<String>> inputDoc) {
-        this.document = document;
+    public DocumentDataValidStringInputDoc(InputDoc<Row<String>> inputDoc) {
         this.inputDoc = inputDoc;
     }
 
+
     @Override
-    public Iterator<Row<Object>> valid() throws Exception {
+    public Iterator<Row> rows() throws Exception {
         Iterator<Row<String>> iterator = inputDoc.rows();
 
-        return new Iterator<Row<Object>>() {
+        return new Iterator<Row>() {
             @Override
             public boolean hasNext() {
                 return iterator.hasNext();
