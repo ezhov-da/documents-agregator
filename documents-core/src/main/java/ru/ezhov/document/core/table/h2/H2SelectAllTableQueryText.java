@@ -3,17 +3,17 @@ package ru.ezhov.document.core.table.h2;
 import ru.ezhov.document.core.document.Document;
 import ru.ezhov.document.core.document.fields.Field;
 import ru.ezhov.document.core.document.fields.Fields;
-import ru.ezhov.document.core.table.CreateTableQueryText;
+import ru.ezhov.document.core.table.SelectTableQueryText;
 import ru.ezhov.document.core.util.text.Text;
 import ru.ezhov.document.core.util.text.TextOf;
 
 import java.util.List;
 
-public final class H2CreateTableQueryText implements CreateTableQueryText {
+public class H2SelectAllTableQueryText implements SelectTableQueryText {
 
     private final Document document;
 
-    public H2CreateTableQueryText(Document document) {
+    public H2SelectAllTableQueryText(Document document) {
         this.document = document;
     }
 
@@ -25,29 +25,28 @@ public final class H2CreateTableQueryText implements CreateTableQueryText {
     }
 
     private String buildQueryText() throws Exception {
-        String query = "CREATE TABLE %1$s (%2$s)";
+        String query = "SELECT %1$s FROM %2$s";
+
         String tableName = document.tableName();
         Fields fields = document.fields();
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilderColumnName = new StringBuilder();
+
         List<Field> list = fields.all();
+
         int size = list.size();
         for (int i = 0; i < size; i++) {
             Field field = list.get(i);
-            stringBuilder.append(buildColumn(field));
+            String columnNameField = field.columnName();
+            stringBuilderColumnName.append(columnNameField);
             if (i + 1 < size) {
-                stringBuilder.append(", ");
+                stringBuilderColumnName.append(", ");
             }
         }
-        String queryText = String.format(
-                query,
-                tableName,
-                stringBuilder.toString()
-        );
-        return queryText;
-    }
 
-    private String buildColumn(Field field) {
-        String columnPattern = "%1$s %2$s";
-        return String.format(columnPattern, field.columnName(), "VARCHAR(" + field.length() + ")");
+        return String.format(
+                query,
+                stringBuilderColumnName.toString(),
+                tableName
+        );
     }
 }

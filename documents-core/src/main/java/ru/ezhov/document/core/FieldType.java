@@ -15,4 +15,13 @@ public enum FieldType {
     public int id() {
         return idType;
     }
+
+    static FieldType valueOf(int id) {
+        for (FieldType fieldType : FieldType.values()) {
+            if (fieldType.id() == id) {
+                return fieldType;
+            }
+        }
+        throw new IllegalArgumentException("Неподдерживаемая ID типа: " + id);
+    }
 }

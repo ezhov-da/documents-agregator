@@ -7,7 +7,9 @@ import ru.ezhov.document.core.util.db.StatementQuery;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DbDocuments implements Documents {
@@ -19,16 +21,45 @@ public class DbDocuments implements Documents {
 
     @Override
     public List<Document> all() {
-        return null;
+        List<Document> documents = new ArrayList<>();
+        try (Connection connection = source.get().getConnection()) {
+            try (PreparedStatement preparedStatement =
+                         connection.prepareStatement(
+                                 "SELECT t0.ID FROM T_DOCUMENT t0")) {
+                try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                    while (resultSet.next()) {
+                        documents.add(new DbDocument(source, resultSet.getInt("ID")));
+                    }
+                }
+            }
+            return documents;
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
-    public Document document(int idDocument) {
-        return null;
+    public Document document(int idDocument) throws Exception {
+        try (Connection connection = source.get().getConnection()) {
+            try (PreparedStatement preparedStatement =
+                         connection.prepareStatement(
+                                 "SELECT t0.ID FROM T_DOCUMENT t0 WHERE ID = ?")) {
+                preparedStatement.setInt(1, idDocument);
+                try (ResultSet resultSet = preparedStatement.executeQuery();) {
+                    if (resultSet.next()) {
+                        return new DbDocument(source, resultSet.getInt("ID"));
+                    } else {
+                        throw new Exception("Не найден документ с ID: " + idDocument);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
-    public Document create(Document document) throws Exception {
+    public Document create(NewDocument document) throws Exception {
         int idDocument = document.id();
 
         try (Connection connection = source.get().getConnection()) {
@@ -56,12 +87,20 @@ public class DbDocuments implements Documents {
     }
 
     @Override
-    public Document edit(Document document) {
-        return null;
+    public Document edit(EditDocument document) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Document delete(int idDocument) {
-        return null;
+    public Document delete(int idDocument) throws Exception {
+        try (Connection connection = source.get().getConnection()) {
+            try (PreparedStatement preparedStatement =
+                         connection.prepareStatement(
+                                 "UPDATE T_DOCUMENT_FIELD t0 SET t0.ACTIVE = FALSE  WHERE t0.ID = ?;")) {
+                preparedStatement.setInt(1, idDocument);
+                preparedStatement.execute();
+                return document(idDocument);
+            }
+        }
     }
 }

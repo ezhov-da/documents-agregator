@@ -1,9 +1,14 @@
 package ru.ezhov.document.core.document;
 
+import ru.ezhov.document.core.document.fields.DbFields;
 import ru.ezhov.document.core.document.fields.Field;
 import ru.ezhov.document.core.document.fields.Fields;
+import ru.ezhov.document.core.document.fields.NewField;
 import ru.ezhov.document.core.inputdoc.Row;
 import ru.ezhov.document.core.source.Source;
+import ru.ezhov.document.core.table.QueryText;
+import ru.ezhov.document.core.table.h2.H2InsertTableQueryText;
+import ru.ezhov.document.core.table.h2.H2SelectAllTableQueryText;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -31,7 +36,7 @@ public class DbDocument implements Document {
         try (Connection connection = source.get().getConnection()) {
             try (PreparedStatement preparedStatement =
                          connection.prepareStatement(
-                                 "SELECT t0.NAME FROM T_DOCUMENT_FIELD t0 WHERE t0.ID = ?;")) {
+                                 "SELECT t0.NAME FROM T_DOCUMENT t0 WHERE t0.ID = ?;")) {
                 preparedStatement.setInt(1, id);
                 try (ResultSet resultSet = preparedStatement.executeQuery();) {
                     if (resultSet.next()) {
@@ -51,7 +56,7 @@ public class DbDocument implements Document {
         try (Connection connection = source.get().getConnection()) {
             try (PreparedStatement preparedStatement =
                          connection.prepareStatement(
-                                 "SELECT t0.ACTIVE FROM T_DOCUMENT_FIELD t0 WHERE t0.ID = ?;")) {
+                                 "SELECT t0.ACTIVE FROM T_DOCUMENT t0 WHERE t0.ID = ?;")) {
                 preparedStatement.setInt(1, id);
                 try (ResultSet resultSet = preparedStatement.executeQuery();) {
                     if (resultSet.next()) {
@@ -89,7 +94,7 @@ public class DbDocument implements Document {
         try (Connection connection = source.get().getConnection()) {
             try (PreparedStatement preparedStatement =
                          connection.prepareStatement(
-                                 "SELECT t0.USERNAME FROM T_DOCUMENT_FIELD t0 WHERE t0.ID = ?;")) {
+                                 "SELECT t0.USERNAME FROM T_DOCUMENT t0 WHERE t0.ID = ?;")) {
                 preparedStatement.setInt(1, id);
                 try (ResultSet resultSet = preparedStatement.executeQuery();) {
                     if (resultSet.next()) {
@@ -109,7 +114,7 @@ public class DbDocument implements Document {
         try (Connection connection = source.get().getConnection()) {
             try (PreparedStatement preparedStatement =
                          connection.prepareStatement(
-                                 "SELECT t0.ADD_DT FROM T_DOCUMENT_FIELD t0 WHERE t0.ID = ?;")) {
+                                 "SELECT t0.ADD_DT FROM T_DOCUMENT t0 WHERE t0.ID = ?;")) {
                 preparedStatement.setInt(1, id);
                 try (ResultSet resultSet = preparedStatement.executeQuery();) {
                     if (resultSet.next()) {
@@ -129,7 +134,7 @@ public class DbDocument implements Document {
         try (Connection connection = source.get().getConnection()) {
             try (PreparedStatement preparedStatement =
                          connection.prepareStatement(
-                                 "SELECT t0.DESCRIPTION FROM T_DOCUMENT_FIELD t0 WHERE t0.ID = ?;")) {
+                                 "SELECT t0.DESCRIPTION FROM T_DOCUMENT t0 WHERE t0.ID = ?;")) {
                 preparedStatement.setInt(1, id);
                 try (ResultSet resultSet = preparedStatement.executeQuery();) {
                     if (resultSet.next()) {
@@ -146,11 +151,11 @@ public class DbDocument implements Document {
 
     @Override
     public Fields fields() {
-        return null;
+        return new DbFields(id, source);
     }
 
     @Override
-    public void createFields(List<Field> fields) {
+    public void createFields(List<NewField> fields) {
         Connection connection = null;
         try {
             connection = source.get().getConnection();
@@ -171,11 +176,9 @@ public class DbDocument implements Document {
                             "ORDERR," +
                             "USERNAME," +
                             "ADD_DT ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
-
-
             )) {
 
-                for (Field field : fields) {
+                for (NewField field : fields) {
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, field.name());
                     preparedStatement.setString(3, field.description());
@@ -191,7 +194,6 @@ public class DbDocument implements Document {
 
                     preparedStatement.addBatch();
                 }
-
                 preparedStatement.executeBatch();
             }
 
@@ -218,43 +220,71 @@ public class DbDocument implements Document {
 
     @Override
     public Field editFields(List<Field> fields) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Field deleteFields(List<Field> fields) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public DocumentData documentData() {
-        return null;
+        return new DbDocumentData(source, new H2SelectAllTableQueryText(this));
     }
 
     @Override
-    public void add(DocumentData documentData) {
+    public void addData(DocumentData documentData) throws Exception {
+        QueryText queryText = new H2InsertTableQueryText(this);
+        Connection connection = null;
         try {
-            Iterator<Row> rows = documentData.rows();
-            while (rows.hasNext()) {
-                Row row = rows.next();
-                Iterator iterator = row.values();
-                while (iterator.hasNext()) {
-                    System.out.println(iterator.next());
+            connection = source.get().getConnection();
+            connection.setAutoCommit(false);
+            try (PreparedStatement preparedStatement =
+                         connection.prepareStatement(queryText.text().asString())) {
+                Iterator<Row> rows = documentData.rows();
+                while (rows.hasNext()) {
+                    Row row = rows.next();
+                    Iterator iterator = row.values();
+                    int counter = 1;
+                    while (iterator.hasNext()) {
+                        preparedStatement.setObject(counter, iterator.next());
+                        counter++;
+                    }
+
+                    preparedStatement.addBatch();
                 }
+                preparedStatement.executeBatch();
             }
+            connection.commit();
         } catch (Exception e) {
             e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }
 
     @Override
-    public void edit(DocumentData documentData) {
+    public void editData(DocumentData documentData) {
 
     }
 
     @Override
-    public void delete(DocumentData documentData) {
+    public void deleteData(DocumentData documentData) {
 
     }
 }

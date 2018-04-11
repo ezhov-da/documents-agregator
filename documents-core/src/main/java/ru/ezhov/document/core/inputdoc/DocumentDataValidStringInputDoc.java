@@ -14,7 +14,6 @@ public class DocumentDataValidStringInputDoc implements DocumentData {
         this.inputDoc = inputDoc;
     }
 
-
     @Override
     public Iterator<Row> rows() throws Exception {
         Iterator<Row<String>> iterator = inputDoc.rows();

@@ -19,7 +19,9 @@ public final class H2InsertTableQueryText implements InsertTableQueryText {
 
     @Override
     public Text text() throws Exception {
-        return new TextOf(buildQueryText());
+        String text = buildQueryText();
+        System.out.println(text);
+        return new TextOf(text);
     }
 
     private String buildQueryText() throws Exception {

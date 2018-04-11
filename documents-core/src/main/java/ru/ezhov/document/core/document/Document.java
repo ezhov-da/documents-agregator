@@ -2,6 +2,7 @@ package ru.ezhov.document.core.document;
 
 import ru.ezhov.document.core.document.fields.Field;
 import ru.ezhov.document.core.document.fields.Fields;
+import ru.ezhov.document.core.document.fields.NewField;
 
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public interface Document {
 
     Fields fields() throws Exception;
 
-    void createFields(List<Field> fields) throws Exception;
+    void createFields(List<NewField> fields) throws Exception;
 
     Field editFields(List<Field> fields) throws Exception;
 
@@ -34,9 +35,9 @@ public interface Document {
 
     DocumentData documentData() throws Exception;
 
-    void add(DocumentData documentData) throws Exception;
+    void addData(DocumentData documentData) throws Exception;
 
-    void edit(DocumentData documentData) throws Exception;
+    void editData(DocumentData documentData) throws Exception;
 
-    void delete(DocumentData documentData) throws Exception;
+    void deleteData(DocumentData documentData) throws Exception;
 }

@@ -6,6 +6,6 @@ import ru.ezhov.document.core.util.text.WithoutDash;
 public class TableName implements Name {
     @Override
     public String get() {
-        return "T_" + new WithoutDash(new TextOf(new UuidName().get())).asString();
+        return "T_" + new WithoutDash(new TextOf(new UuidName().get().toUpperCase())).asString();
     }
 }

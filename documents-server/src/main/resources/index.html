@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css"
+          rel="stylesheet"/>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+
+
+    <script type="text/javascript">
+
+        /*======================================================================================================
+         ПАНЕЛЬ для работы с выбранным документом
+         */
+        var panelProcessDocumentNorth = Ext.create('Ext.panel.Panel', {
+            xtype: 'panelProcessDocumentNorth',
+            region: 'north',
+            //html: 'Я здесь для кнопок'
+            layout: 'hbox',
+            items: [
+                Ext.create('Ext.Button', {
+                    text: 'Выгрузить документ',
+                    flex: 1,
+                    handler: function () {
+                        alert('You clicked the button!');
+                    }
+                }),
+                Ext.create('Ext.Button', {
+                    text: 'Поиск по документу',
+                    flex: 1,
+                    handler: function () {
+                        alert('You clicked the button!');
+                    }
+                }),
+                Ext.create('Ext.Button', {
+                    text: 'Просто тестовая',
+                    flex: 1,
+                    handler: function () {
+                        alert('You clicked the button!');
+                    }
+                })
+            ]
+        });
+        //======================================================================================================
+
+        /*======================================================================================================
+         ПАНЕЛЬ для отображения данных выбранного документа
+         */
+        var panelProcessDocumentCenterDocument = Ext.create('Ext.panel.Panel', {
+            xtype: 'panelProcessDocumentCenterDocument',
+            height: 100,
+            width: 'fit',
+            region: 'center',
+            layout: 'border',
+            items: [{
+                xtype: 'panel',
+                height: 100,
+                width: 100,
+                region: 'center',
+                html: 'Выберите документ для просмотра'
+
+            }]
+        });
+        //======================================================================================================
+
+        /*======================================================================================================
+         ПАНЕЛЬ В КОТОРОЙ МОЖНО ПРОСМАТРИВАТЬ ДАННЫЕ ПО ВЫБРАННОМУ ДОКУМЕНТУ
+         */
+        var panelProcessDocumentCenter = Ext.create('Ext.panel.Panel', {
+            xtype: 'panelProcessDocumentCenter',
+            height: 100,
+            width: 'fit',
+            region: 'center',
+            title: 'Просмотр документа',
+            layout: 'border',
+            items: [
+                panelProcessDocumentNorth,
+                panelProcessDocumentCenterDocument
+            ]
+        });
+        //======================================================================================================
+
+        /*======================================================================================================
+         ПАНЕЛЬ В КОТОРОЙ РАСПОЛАГАЕТСЯ СПИСОК ДОСТУПНЫХ ДОКУМЕНТОВ
+         */
+        var store = Ext.create('Ext.data.Store', {
+            storeId: 'simpsonsStore',
+            fields: ['id', 'name', 'description', 'lastUsername', 'lastDt'],
+            data: [
+                {
+                    id: '0',
+                    name: 'Список ГМ',
+                    description: 'Эталонный документ со списком ГМ',
+                    lastUsername: 'ezhov_da',
+                    lastDt: new Date()
+                },
+                {
+                    id: '1',
+                    name: 'Лицензии',
+                    description: 'Лицензии ГМ с датами начала и окончания',
+                    lastUsername: 'ezhov_da',
+                    lastDt: new Date()
+                },
+                {
+                    id: '2',
+                    name: 'Санитарная обработка',
+                    description: 'Даты проведения санитарной обработки',
+                    lastUsername: 'ezhov_da',
+                    lastDt: new Date()
+                },
+                {
+                    id: '3',
+                    name: 'Моющие средства',
+                    description: 'Остатки моющих средств на ГМ',
+                    lastUsername: 'ezhov_da',
+                    lastDt: new Date()
+                },
+                {
+                    id: '4',
+                    name: 'Санитарные книжки',
+                    description: 'Даты окончания прохождения санитарных книжек',
+                    lastUsername: 'ezhov_da',
+                    lastDt: new Date()
+                }
+            ]
+        });
+
+        var grid = Ext.create('Ext.grid.Panel', {
+            title: 'Документы',
+            store: store,
+            columns: [
+                {text: 'Название', dataIndex: 'name'},
+                {text: 'Описание', dataIndex: 'description', flex: 1},
+                {text: 'Последний редактируемый пользователь', dataIndex: 'lastUsername'},
+                {text: 'Последняя дата редактирования', dataIndex: 'lastDt'}
+            ],
+            height: 500,
+            width: 500,
+            region: 'west',
+
+            listeners: {
+                itemclick: function (grid, record, item, index, event) {
+                    //alert(index);
+
+                    var fields0 = ['zero'];
+                    var data0 = [{zero: 'Wow'}];
+                    var columns0 = [{text: 'Ноль', dataIndex: 'zero'}]
+
+                    var fields1 = ['zero', 'zero1'];
+                    var data1 = [{zero: 'Wow', zero1: 'yes'}];
+                    var columns1 = [{text: 'Ноль', dataIndex: 'zero'}, {text: 'Ноль1', dataIndex: 'zero1'}]
+
+                    var fields2 = ['zero', 'zero1', 'zero2'];
+                    var data2 = [{zero: 'Wow', zero1: 'yes', zero2: 'tick'}];
+                    var columns2 = [{text: 'Ноль', dataIndex: 'zero'}, {
+                        text: 'Ноль1',
+                        dataIndex: 'zero1'
+                    }, {text: 'Ноль2', dataIndex: 'zero2'}]
+
+                    var fields3 = ['zero', 'zero1', 'zero2', 'zero3'];
+                    var data3 = [{zero: 'Wow', zero1: 'yes', zero2: 'tick', zero3: 'agaga'}];
+                    var columns3 = [
+                        {text: 'Ноль', dataIndex: 'zero'},
+                        {text: 'Ноль1', dataIndex: 'zero1'},
+                        {text: 'Ноль2', dataIndex: 'zero2'},
+                        {text: 'Ноль3', dataIndex: 'zero3'}
+                    ]
+
+
+                    var fields = null;
+                    var data = null;
+                    var columns = null;
+
+                    switch (index) {
+                        case(0):
+                            fields = fields0;
+                            data = data0;
+                            columns = columns0;
+                            break;
+                        case(1):
+                            fields = fields1;
+                            data = data1;
+                            columns = columns1;
+                            break;
+                        case(2):
+                            fields = fields2;
+                            data = data2;
+                            columns = columns2;
+                            break;
+                        case(3):
+                            fields = fields3;
+                            data = data3;
+                            columns = columns3;
+                            break;
+                    }
+
+
+                    var store1 = Ext.create('Ext.data.Store', {
+                        storeId: 'simpsonsStore1',
+                        fields: fields,
+                        data: data
+                    });
+
+                    var grid = Ext.create('Ext.grid.Panel', {
+                        store: store1,
+                        columns: columns,
+                        height: 500,
+                        width: 'fit',
+                        region: 'center',
+
+                        listeners: {
+                            itemclick: function (grid, record, item, index, event) {
+                                alert(index);
+                            }
+                        }
+                    });
+
+                    panelProcessDocumentCenterDocument.removeAll();
+                    panelProcessDocumentCenterDocument.add(grid);
+
+                }
+            }
+        });
+
+
+        var panelProcessDocumentWest = Ext.create('Ext.panel.Panel', {
+            xtype: 'panelProcessDocumentWest',
+            height: 100,
+            width: 200,
+            region: 'west',
+            title: 'Документы',
+            layout: 'border',
+            items: [{
+                grid
+            }]
+        });
+        //======================================================================================================
+
+        /*
+         ОСНОВНАЯ ПАНЕЛЬ ДЛЯ ВКЛАДКИ РАБОТЫ С ДОКУМЕНТАМИ
+         */
+        var panelProcessDocuments = Ext.create('Ext.panel.Panel', {
+            xtype: 'PanelProcessDocument',
+            height: 100,
+            width: 'fit',
+            region: 'center',
+            layout: 'border',
+
+            defaults: {
+                collapsible: true,
+                split: true
+            },
+
+            items: [
+                //panelProcessDocumentWest,
+                grid,
+                panelProcessDocumentCenter
+            ]
+        });
+
+        /*
+         ОСНОВНАЯ TAB ПАНЕЛЬ ПРИЛОЖЕНИЯ
+         */
+        var basicTabPanel = Ext.create('Ext.tab.Panel', {
+            xtype: 'BasicTabPanel',
+            region: 'center',
+            height: 100,
+            width: 'fit',
+            items: [{
+                xtype: 'panel',
+                title: 'Работа с документами',
+                width: 'fit',
+                layout: 'border',
+                items: [panelProcessDocuments],
+                listeners: {
+                    render: function () {
+                        //Ext.MessageBox.alert('Tab one', 'Tab One was clicked.');
+                    }
+                }
+            }, {
+                xtype: 'panel',
+                title: 'Управление документами',
+                html: 'The second tab',
+                listeners: {
+                    render: function () {
+                        //Ext.MessageBox.alert('Tab two', 'Tab Two was clicked.');
+                    }
+                }
+            }]
+        });
+
+
+        /*
+         ПАНЕЛЬ ПРИЛОЖЕНИЯ
+         */
+        Ext.onReady(function () {
+            Ext.create('Ext.container.Viewport', {
+                renderTo: 'app',
+                layout: 'border',
+                items: [
+                    Ext.create('Ext.panel.Panel', {
+                        region: 'center',
+                        layout: 'border',
+                        height: 400,
+                        width: 'fit',
+                        title: 'Агрегатор документов',
+                        items: [
+                            basicTabPanel
+                        ]
+                    })
+                ]
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+<div id="app"></div>
+</body>
+</html>

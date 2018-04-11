@@ -6,6 +6,6 @@ import ru.ezhov.document.core.util.text.WithoutDash;
 public class ColumnName implements Name {
     @Override
     public String get() {
-        return "C" + new WithoutDash(new TextOf(new UuidName().get())).asString();
+        return "C_" + new WithoutDash(new TextOf(new UuidName().get().toUpperCase())).asString();
     }
 }

@@ -2,109 +2,32 @@ package ru.ezhov.document.core.document.fields;
 
 import ru.ezhov.document.core.FieldType;
 import ru.ezhov.document.core.document.Order;
-import ru.ezhov.document.core.name.ColumnName;
 
 import java.util.Date;
 
-public class NewField implements Field {
+/**
+ * Created by ezhov_da on 11.04.2018.
+ */
+public interface NewField {
+    String name();
 
-    private String name;
-    private String description;
-    private boolean active;
-    private boolean key;
-    private ColumnName columnName;
-    private FieldType type;
-    private int length;
-    private boolean empty;
-    private Order order;
-    private String username;
+    String description();
 
-    public NewField(
-            String name,
-            String description,
-            boolean active,
-            boolean key,
-            ColumnName columnName,
-            FieldType type,
-            int length,
-            boolean empty,
-            Order order,
-            String username
-    ) {
-        this.name = name;
-        this.description = description;
-        this.active = active;
-        this.key = key;
-        this.columnName = columnName;
-        this.type = type;
-        this.length = length;
-        this.empty = empty;
-        this.order = order;
-        this.username = username;
-    }
+    boolean active();
 
-    @Override
-    public int id() {
-        throw new UnsupportedOperationException();
-    }
+    boolean key();
 
-    @Override
-    public int idDocument() {
-        throw new UnsupportedOperationException();
-    }
+    String columnName();
 
-    @Override
-    public String name() {
-        return name;
-    }
+    FieldType type();
 
-    @Override
-    public String description() {
-        return description;
-    }
+    int length();
 
-    @Override
-    public boolean active() {
-        return active;
-    }
+    boolean empty();
 
-    @Override
-    public boolean key() {
-        return key;
-    }
+    Order order();
 
-    @Override
-    public String columnName() {
-        return columnName.get();
-    }
+    String username();
 
-    @Override
-    public FieldType type() {
-        return type;
-    }
-
-    @Override
-    public int length() {
-        return length;
-    }
-
-    @Override
-    public boolean empty() {
-        return empty;
-    }
-
-    @Override
-    public Order order() {
-        return order;
-    }
-
-    @Override
-    public String username() {
-        return username;
-    }
-
-    @Override
-    public Date addDt() {
-        return new Date();
-    }
+    Date addDt();
 }
