@@ -33,7 +33,7 @@ public interface Document {
 
     Field deleteFields(List<Field> fields) throws Exception;
 
-    DocumentData documentData() throws Exception;
+    DocumentData data() throws Exception;
 
     void addData(DocumentData documentData) throws Exception;
 

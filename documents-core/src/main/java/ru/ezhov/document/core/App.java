@@ -70,7 +70,7 @@ public class App {
 
     private static void showDataDocument(int idDocument) throws Exception {
         Source<DataSource> source = new H2Source();
-        Iterator<Row> iterator = new DbDocuments(source).document(idDocument).documentData().rows();
+        Iterator<Row> iterator = new DbDocuments(source).document(idDocument).data().rows();
         while (iterator.hasNext()) {
             Row row = iterator.next();
             Iterator<Object> it = row.values();

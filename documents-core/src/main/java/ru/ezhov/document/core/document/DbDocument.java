@@ -229,7 +229,7 @@ public class DbDocument implements Document {
     }
 
     @Override
-    public DocumentData documentData() {
+    public DocumentData data() {
         return new DbDocumentData(source, new H2SelectAllTableQueryText(this));
     }
 
