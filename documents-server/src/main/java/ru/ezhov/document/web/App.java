@@ -38,21 +38,22 @@ public final class App {
 
         */
 
-        new FtBasic(new TkFork(
-                new FkRegex("/", new TkIndex(source)),
-                new FkRegex("/documents/rest/view/active/info", new TkDocuments(documents)),
-                new FkRegex("/documents/(?<id>\\d+)/rest/view/fields/active/info", new TkDocumentData(documents)),
-                new FkRegex("/documents/(?<id>\\d+)/rest/view/fields/active/names", new TkDocumentData(documents)),
-                new FkRegex("/documents/(?<id>\\d+)/rest/view/data/active", new TkDocumentData(documents)),
+        new FtBasic(
+                new TkFork(
+                        new FkRegex("/", new TkIndex(source)),
+                        new FkRegex("/documents/rest/view/active/info", new TkDocuments(documents)),
+                        new FkRegex("/documents/(?<id>\\d+)/rest/view/fields/active/info", new TkDocumentData(documents)),
+                        new FkRegex("/documents/(?<id>\\d+)/rest/view/fields/active/names", new TkDocumentData(documents)),
+                        new FkRegex("/documents/(?<id>\\d+)/rest/view/data/active", new TkDocumentData(documents)),
 
-                new FkRegex("/documents/rest/edit/all/info", new TkDocuments(documents)),
-                new FkRegex("/documents/(?<id>\\d+)/rest/edit/fields/all/info", new TkDocumentData(documents)),
+                        new FkRegex("/documents/rest/edit/all/info", new TkDocuments(documents)),
+                        new FkRegex("/documents/(?<id>\\d+)/rest/edit/fields/all/info", new TkDocumentData(documents)),
 
-                new FkRegex("/documents/(?<id>\\d+)/action/new", new TkDocumentData(documents)),
-                new FkRegex("/documents/(?<id>\\d+)/action/edit", new TkDocumentData(documents)),
-                new FkRegex("/documents/(?<id>\\d+)/action/delete", new TkDocumentData(documents))
-        )
-                , 8080
+                        new FkRegex("/documents/(?<id>\\d+)/action/new", new TkDocumentData(documents)),
+                        new FkRegex("/documents/(?<id>\\d+)/action/edit", new TkDocumentData(documents)),
+                        new FkRegex("/documents/(?<id>\\d+)/action/delete", new TkDocumentData(documents))
+                ),
+                8080
         ).start(Exit.NEVER);
     }
 }
